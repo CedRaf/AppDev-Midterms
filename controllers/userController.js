@@ -34,7 +34,7 @@ const registerNewUser = async (req, res) =>{
     const newUser = {
         username, 
         email,
-        hashedPassword,
+        password: hashedPassword,
     }
 
     const createdUser = await User.createUser(newUser); 
@@ -77,14 +77,17 @@ const loginAccount = async (req, res) =>{
     });
 }
 
-const getAllUsers= (req, res) =>{
-    const users = User.getAllUsers();
-
-    res.json(users); 
+const getIndividualUser = async (req, res) =>{
+    const userID = req.user.id; 
+    const user = await User.getUserID(userID); 
+    if(!user){
+        return res.status(404).json({message: "User Not Found"}); 
+    }
+    res.json(user); 
 }
 
 module.exports = {
     registerNewUser,
     loginAccount,
-    getAllUsers
+    getIndividualUser
 }; 

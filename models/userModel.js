@@ -22,7 +22,7 @@ const users = [
 /* IMPORTANT NOTES
     - The reason why the password is hashed above is because of bcrypts comparison logic. In the login function found on userController,
       we use bcrypt.compare(inputtedPlainTextPassword, user.password), this function hashes the inputted password and compares it to what we set above.
-      So, if we set it to plain text as well, the passwords will never match.
+      So, if we set the password above to plain text as well, the passwords will never match.
 */
 
 
@@ -44,7 +44,7 @@ const getUserEmail = (email) =>{
 
 const createUser = (newUser) =>{
     const newID = users.length > 0 ? users[users.length-1].id + 1 : 1;
-    const user = {newID, ...newUser}; 
+    const user = {id: newID, ...newUser}; 
     users.push(user);
     return user; 
 }
