@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken'); 
 
 const authMiddleware = (req, res, next) => {
-    const authHeader = request.headers["authorization"];
-    const token = authHeader && authHeader.split("")[1]; 
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; 
     const key = 'CS3105APPDEV';
 
     if(!token){
@@ -13,11 +13,9 @@ const authMiddleware = (req, res, next) => {
         if(error){
             return res.status(403).json({message: "Invalid Token"});
         }
+        req.user = user;
+        next(); 
     })
-
-    req.user = user;
-    next(); 
-
 }
 
 module.exports = authMiddleware; 

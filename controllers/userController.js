@@ -23,9 +23,9 @@ const registerNewUser = async (req, res) =>{
 
     const {username, email, password} = req.body; 
 
-    const existingUser = await User.getEmail(email);
+    const existingUser = await User.getUserEmail(email);
 
-    if(!existingUser){
+    if(existingUser){
         return res.status(400).json({message: "An account with this email already exists!"});
     }
     
@@ -39,7 +39,7 @@ const registerNewUser = async (req, res) =>{
 
     const createdUser = await User.createUser(newUser); 
     if(createdUser){
-        res.status(200).json({message: "New user successfully created!"}); 
+        return res.status(200).json({message: "New user successfully created!"}); 
     }
 
     return res.status(500).json({ message: "User creation failed!" });
@@ -54,7 +54,7 @@ const loginAccount = async (req, res) =>{
 
     const {email, password} = req.body;
 
-    const existingUser = await User.getEmail(email); 
+    const existingUser = await User.getUserEmail(email); 
     if(!existingUser){
         return res.status(400).json({message: "Invalid Email"}); 
     }
@@ -66,9 +66,9 @@ const loginAccount = async (req, res) =>{
 
     const token = jwt.sign({id: existingUser.id, email:existingUser.email}, 'CS3105APPDEV', {expiresIn: '1h'}); 
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Login Successful",
-        token: token, // include the token
+        token: token, 
         user: {
             id: existingUser.id,
             username: existingUser.username,
